@@ -21,7 +21,7 @@ L'application se connecte elle-même au démon ADB du décodeur (`127.0.0.1:5555
 
 > **Compatibilité** : testé uniquement sur un décodeur **SFR Connect TV** (Android TV 12) avec une télécommande **Bbox Miami**. Les autres boîtiers Android TV n'ont pas été testés.
 >
-> **Prérequis important** : depuis une mise à jour déployée par SFR en **décembre 2025**, l'accès aux options pour développeurs (et donc au débogage ADB) est verrouillé par un mot de passe opérateur.
+> **Prérequis important** : depuis une mise à jour déployée par SFR en **décembre 2025**, l'accès aux options pour développeurs (et donc au débogage ADB) est verrouillé par un mot de passe opérateur. Une méthode permettant de le retrouver est documentée sur [ce dépôt](LIEN_DU_DEPOT).
 
 ---
 
@@ -65,7 +65,7 @@ Le bouton REPLAY de la télécommande d'origine envoie le scancode `0x195` (405)
 
 ## 🔧 Activer le mode développeur et ADB
 
-> **Note (mise à jour SFR de décembre 2025)** : suite à une mise à jour système déployée par SFR en décembre 2025, l'activation du mode développeur est désormais protégée par un mot de passe défini par l'opérateur. L'accès ADB étant indispensable au fonctionnement de l'application, ces étapes ne sont réalisables que si les options pour développeurs étaient déjà déverrouillées avant cette mise à jour ou si vous disposez du code d'accès.
+> **Note (mise à jour SFR de décembre 2025)** : suite à une mise à jour système déployée par SFR en décembre 2025, l'activation du mode développeur est désormais protégée par un mot de passe défini par l'opérateur. L'accès ADB étant indispensable au fonctionnement de l'application, ces étapes nécessitent soit d'avoir déverrouillé ces options avant la mise à jour, soit de récupérer ce mot de passe grâce à la technique documentée sur [ce dépôt](https://github.com/dotkl3m/dev_mode_unlock).
 
 Les libellés des menus ci-dessous peuvent varier selon la version du système :
 
