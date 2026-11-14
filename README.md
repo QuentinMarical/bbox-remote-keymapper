@@ -1,31 +1,48 @@
-# Bbox Remote KeyMapper
+<p align="center">
+  <img src="assets/icon.svg" width="128" alt="Icône Bbox Remote KeyMapper" />
+</p>
 
-Application Android TV pour SFR Connect TV qui relie les touches de la télécommande Bbox Miami à des actions du décodeur (ou à une application).
+<h1 align="center">Bbox Remote KeyMapper</h1>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Android%20TV-12-0055A4?logo=android&logoColor=white" alt="Android TV 12" />
+  <img src="https://img.shields.io/badge/minSdk-24-E4572E" alt="minSdk 24" />
+</p>
+
+<p align="center">
+  Relie les touches de la télécommande <strong>Bbox Miami</strong> sur <strong>SFR Connect TV</strong> à des actions du décodeur ou à des applications.
+</p>
 
 L'application se connecte elle-même au démon ADB du décodeur (`127.0.0.1:5555`) et lit la télécommande : aucun PC n'est nécessaire une fois l'application installée.
 
-## Touches reliées
+> GitHub n'applique pas le CSS dans les README : la mise en forme passe par du HTML simple et des badges colorés.
+
+---
+
+## 🎛️ Touches reliées
 
 Codes issus de la table `AdbWatchService.BUTTONS` et des captures `getevent` faites sur la télécommande `Telecommande`.
 
-| Touche | Code scan (hex) | Code scan (décimal) | Nom noyau | Action par défaut |
+| Touche | Code scan (hex) | Code scan (déc.) | Nom noyau | Action par défaut |
 |---|---|---|---|---|
-| VOD | `00ba` | 186 | KEY_F16 | `KEYCODE_SDMCEXTEND6` (REPLAY) |
-| Retour | `0001` | 1 | KEY_ESC | `KEYCODE_BACK` |
-| Accueil | `0066` | 102 | KEY_HOME | `KEYCODE_HOME` |
-| TV | `00b7` | 183 | KEY_F13 | `KEYCODE_SDMCEXTEND2` (bouton TV d'origine du SFR) |
-| Menu | `0082` | 130 | KEY_PROPS | application (YouTube par défaut) |
-| Favoris | `00bb` | 187 | KEY_F17 | application (Netflix par défaut) |
+| 🎬 **VOD** | `00ba` | 186 | KEY_F16 | `KEYCODE_SDMCEXTEND6` (REPLAY) |
+| ↩️ **Retour** | `0001` | 1 | KEY_ESC | `KEYCODE_BACK` |
+| 🏠 **Accueil** | `0066` | 102 | KEY_HOME | `KEYCODE_HOME` |
+| 📺 **TV** | `00b7` | 183 | KEY_F13 | `KEYCODE_SDMCEXTEND2` (bouton TV d'origine du SFR) |
+| ⋮ **Menu** | `0082` | 130 | KEY_PROPS | application (YouTube par défaut) |
+| ❤️ **Favoris** | `00bb` | 187 | KEY_F17 | application (Netflix par défaut) |
 
-Les touches TV, Menu et Favoris peuvent être changées depuis l'écran de l'application, avec le bouton **Changer**. Pour TV, le premier choix du sélecteur rétablit l'action d'origine.
+Les touches **TV**, **Menu** et **Favoris** peuvent être changées depuis l'écran de l'application, avec le bouton **Changer**. Pour la touche TV, le premier choix du sélecteur rétablit l'action d'origine.
 
-Les autres touches de la télécommande ne sont pas encore documentées ici.
+Les autres touches sont gérées nativement par Android TV.
 
 ### Télécommande d'origine (pour référence)
 
 Le bouton REPLAY de la télécommande d'origine envoie le scancode `0x195` (405) sur le périphérique `RemoteB038`. Le système le traduit en `KEYCODE_SDMCEXTEND6`, qui lance REPLAY via le service `GlobalKey`.
 
-## Compilation
+---
+
+## 🛠️ Compilation
 
 Le projet ne contient pas le wrapper Gradle. Il faut :
 - JDK 17 ou plus ;
@@ -40,7 +57,7 @@ gradle assembleDebug
 
 L'APK est généré dans `app/build/outputs/apk/debug/app-debug.apk`.
 
-## Installation sur le décodeur
+## 📦 Installation sur le décodeur
 
 Activez le débogage ADB sur le décodeur (réseau ou USB), puis :
 
@@ -51,14 +68,14 @@ adb install -r app-debug.apk
 
 Remplacez `192.168.1.100` par l'adresse IP de votre décodeur. Acceptez la demande d'autorisation qui s'affiche sur l'écran, avec « toujours autoriser ».
 
-## Utilisation
+## ▶️ Utilisation
 
 1. Ouvrez l'application sur le décodeur : le pont ADB démarre tout seul.
 2. Si le pont est arrêté, le bouton **Relancer le pont** le redémarre.
 3. Pour changer une touche, cliquez sur **Changer** et choisissez l'application dans la liste.
 4. Au démarrage du décodeur, le pont se relance seul.
 
-## Fonctionnement et limites
+## ⚠️ Fonctionnement et limites
 
 - Le pont s'exécute au premier plan avec une notification, pour qu'Android ne l'arrête pas quand l'application est inactive.
 - Pendant la veille, le réseau du décodeur est coupé : le pont se reconnecte au réveil, en réessayant toutes les 3 à 10 secondes.
