@@ -57,6 +57,18 @@ gradle assembleDebug
 
 L'APK est généré dans `app/build/outputs/apk/debug/app-debug.apk`.
 
+## 🔧 Activer le mode développeur et ADB
+
+Ces étapes supposent que les options pour développeurs sont déjà accessibles sur le décodeur. Les libellés des menus peuvent varier selon la version du système.
+
+1. Ouvrez les **Paramètres** du décodeur, puis **Préférences de l'appareil** (ou **À propos**).
+2. Sélectionnez **Informations sur le système**, puis **Numéro de build** (ou **Version**), et appuyez plusieurs fois dessus jusqu'à l'apparition d'un message indiquant que les options pour développeurs sont activées.
+3. Revenez aux paramètres, ouvrez **Options pour les développeurs**.
+4. Activez **Débogage USB** et, si le menu le propose, **Débogage réseau** (ou **Débogage ADB sur le réseau**).
+5. Notez l'adresse IP du décodeur, affichée dans **Réseau** ou **Informations réseau**.
+
+Documentation officielle Android : [Options pour les développeurs](https://developer.android.com/studio/debug/dev-options).
+
 ## 📦 Installation sur le décodeur
 
 1. Copiez `app-debug.apk` sur le décodeur, par exemple depuis une clé USB, et installez-le avec un gestionnaire de fichiers.
