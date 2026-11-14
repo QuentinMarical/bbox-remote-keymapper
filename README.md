@@ -25,13 +25,13 @@ L'application se connecte elle-même au démon ADB du décodeur (`127.0.0.1:5555
 
 ## Sommaire
 
-- [Touches reliées](#touches-reliées)
-- [Activer le mode développeur et ADB](#activer-le-mode-développeur-et-adb)
-- [Installation sur le décodeur](#installation-sur-le-décodeur)
-- [Utilisation](#utilisation)
-- [Fonctionnement et limites](#fonctionnement-et-limites)
-- [Dépannage](#dépannage)
-- [Compilation et développement](#compilation-et-développement)
+- [Touches reliées](#-touches-reliées)
+- [Activer le mode développeur et ADB](#-activer-le-mode-développeur-et-adb)
+- [Installation sur le décodeur](#-installation-sur-le-décodeur)
+- [Utilisation](#-utilisation)
+- [Fonctionnement et limites](#-fonctionnement-et-limites)
+- [Dépannage](#-dépannage)
+- [Compilation et développement](#-compilation-et-développement)
 
 ---
 
@@ -145,6 +145,12 @@ L'APK est généré dans `app/build/outputs/apk/debug/app-debug.apk`.
 
 ### Ajouter une touche
 
-1. Relevez le code hexadécimal de la touche avec `getevent` : ouvrez un terminal ADB connecté au décodeur, lancez `adb shell getevent -l`, puis appuyez sur la touche. La ligne `EV_KEY` donne le nom du code noyau, et le code hexadécimal se lit avec `adb shell getevent` (sans `-l`).
+1. Relevez le code hexadécimal de la touche avec `getevent` : ouvrez un terminal ADB connecté au décodeur, lancez `adb shell getevent -l`, puis appuyez sur la touche pour repérer la ligne `EV_KEY` (le nom du code noyau). Relancez ensuite `adb shell getevent` (sans `-l`) pour lire le code brut :
+
+   ```text
+   /dev/input/event6: 0001 00ba 00000001
+   ```
+
+   Ici, `0001` correspond à `EV_KEY` et le deuxième groupe (`00ba`) est le code hexadécimal à reporter. Le chemin `event6` peut changer au redémarrage.
 2. Ajoutez une ligne dans la table `BUTTONS` de `app/src/main/java/fr/bbox/keymapper/AdbWatchService.java` : code scan hexadécimal sur quatre chiffres, libellé, et commande shell. Pour une touche qui lance une application au choix, utilisez la constante `APP`.
 3. Recompilez et réinstallez l'application.
