@@ -15,6 +15,23 @@
 
 L'application se connecte elle-même au démon ADB du décodeur (`127.0.0.1:5555`) et lit la télécommande : aucun PC n'est nécessaire une fois l'application installée.
 
+<p align="center">
+  <img src="assets/capture-app.png" width="640" alt="Écran de l'application sur le décodeur" />
+</p>
+
+**Compatibilité** : testé uniquement sur une SFR Connect TV (Android TV 12) avec la télécommande Bbox Miami. Les autres boîtiers Android TV n'ont pas été testés.
+
+---
+
+## 📑 Sommaire
+
+- [Touches reliées](#-touches-reliées)
+- [Installation sur le décodeur](#-installation-sur-le-décodeur)
+- [Activer le mode développeur et ADB](#-activer-le-mode-développeur-et-adb)
+- [Utilisation](#-utilisation)
+- [Compilation](#-compilation)
+- [Fonctionnement et limites](#-fonctionnement-et-limites)
+
 ---
 
 ## 🎛️ Touches reliées
@@ -40,6 +57,61 @@ Le bouton REPLAY de la télécommande d'origine envoie le scancode `0x195` (405)
 
 ---
 
+## 📦 Installation sur le décodeur
+
+Il faut d'abord que le débogage ADB soit actif sur le décodeur : l'application s'y connecte elle-même (`127.0.0.1:5555`). Voir [Activer le mode développeur et ADB](#-activer-le-mode-développeur-et-adb).
+
+Ensuite, deux méthodes pour installer `app-debug.apk` :
+
+**Méthode 1 : depuis le décodeur**
+
+1. Copiez `app-debug.apk` sur le décodeur, par exemple depuis une clé USB, et installez-le avec un gestionnaire de fichiers.
+2. Ouvrez l'application une fois.
+
+**Méthode 2 : depuis un PC avec ADB**
+
+Vous avez besoin d'ADB sur l'ordinateur. Deux possibilités :
+
+- **Android Studio** : téléchargez-le sur [developer.android.com/studio](https://developer.android.com/studio). ADB est fourni avec le SDK (dossier `platform-tools`).
+- **Minimal ADB and Fastboot** (Windows uniquement) : téléchargez-le depuis le [fil XDA-Developers](https://forum.xda-developers.com/showthread.php?t=2317790). Vérifiez le fichier avant de l'exécuter, car il existe des copies non officielles.
+- Pour toute plate-forme, le plus sûr reste les [platform-tools officiels de Google](https://developer.android.com/tools/releases/platform-tools).
+
+Puis :
+
+```bash
+adb connect 192.168.1.100:5555
+adb install -r app-debug.apk
+```
+
+Remplacez `192.168.1.100` par l'adresse IP de votre décodeur.
+
+**Première ouverture** : l'application démarre le pont ADB, qui affiche une demande d'autorisation sur l'écran du décodeur. Cochez « toujours autoriser ». Cette demande apparaît généralement au premier lancement : si vous ne regardez pas la télé à ce moment-là, l'application peut sembler ne pas réagir. Ouvrez-la de nouveau et regardez l'écran.
+
+---
+
+## 🔧 Activer le mode développeur et ADB
+
+Ces étapes supposent que les options pour développeurs sont déjà accessibles sur le décodeur. Les libellés des menus peuvent varier selon la version du système.
+
+1. Ouvrez les **Paramètres** du décodeur, puis **Préférences de l'appareil** (ou **À propos**).
+2. Sélectionnez **Informations sur le système**, puis **Numéro de build** (ou **Version**), et appuyez plusieurs fois dessus jusqu'à l'apparition d'un message indiquant que les options pour développeurs sont activées.
+3. Revenez aux paramètres, ouvrez **Options pour les développeurs**.
+4. Activez **Débogage USB** et, si le menu le propose, **Débogage réseau** (ou **Débogage ADB sur le réseau**).
+5. Notez l'adresse IP du décodeur, affichée dans **Réseau** ou **Informations réseau**.
+
+Documentation officielle Android : [Options pour les développeurs](https://developer.android.com/studio/debug/dev-options).
+
+---
+
+## ▶️ Utilisation
+
+1. Ouvrez l'application sur le décodeur : le pont ADB démarre tout seul.
+2. Si le pont est arrêté, le bouton **Relancer le pont** le redémarre.
+3. Pour changer une touche, cliquez sur **Changer** et choisissez l'application dans la liste.
+4. Au démarrage du décodeur, le pont se relance seul.
+
+---
+
 ## 🛠️ Compilation
 
 Le projet ne contient pas le wrapper Gradle. Il faut :
@@ -55,48 +127,7 @@ gradle assembleDebug
 
 L'APK est généré dans `app/build/outputs/apk/debug/app-debug.apk`.
 
-## 🔧 Activer le mode développeur et ADB
-
-Ces étapes supposent que les options pour développeurs sont déjà accessibles sur le décodeur. Les libellés des menus peuvent varier selon la version du système.
-
-1. Ouvrez les **Paramètres** du décodeur, puis **Préférences de l'appareil** (ou **À propos**).
-2. Sélectionnez **Informations sur le système**, puis **Numéro de build** (ou **Version**), et appuyez plusieurs fois dessus jusqu'à l'apparition d'un message indiquant que les options pour développeurs sont activées.
-3. Revenez aux paramètres, ouvrez **Options pour les développeurs**.
-4. Activez **Débogage USB** et, si le menu le propose, **Débogage réseau** (ou **Débogage ADB sur le réseau**).
-5. Notez l'adresse IP du décodeur, affichée dans **Réseau** ou **Informations réseau**.
-
-Documentation officielle Android : [Options pour les développeurs](https://developer.android.com/studio/debug/dev-options).
-
-## 📦 Installation sur le décodeur
-
-1. Copiez `app-debug.apk` sur le décodeur, par exemple depuis une clé USB, et installez-le avec un gestionnaire de fichiers.
-2. Ouvrez l'application une fois : elle démarre le pont ADB, qui affiche une demande d'autorisation sur l'écran. Cochez « toujours autoriser ».
-
-Le débogage ADB doit être actif sur le décodeur, car l'application s'y connecte elle-même (`127.0.0.1:5555`). Aucune commande depuis un PC n'est nécessaire.
-
-### Option : installer depuis un PC avec ADB
-
-Si vous préférez installer l'APK depuis un ordinateur, vous avez besoin d'ADB. Deux possibilités :
-
-- **Android Studio** : téléchargez-le sur [developer.android.com/studio](https://developer.android.com/studio). ADB est fourni avec le SDK (dossier `platform-tools`).
-- **Minimal ADB and Fastboot** (Windows uniquement) : téléchargez-le depuis le [fil XDA-Developers](https://forum.xda-developers.com/showthread.php?t=2317790). Vérifiez le fichier avant de l'exécuter, car il existe des copies non officielles.
-- Pour toute plate-forme, le plus sûr reste les [platform-tools officiels de Google](https://developer.android.com/tools/releases/platform-tools).
-
-Ensuite, sur le décodeur avec le débogage ADB actif :
-
-```bash
-adb connect 192.168.1.100:5555
-adb install -r app-debug.apk
-```
-
-Remplacez `192.168.1.100` par l'adresse IP de votre décodeur, et acceptez la demande d'autorisation sur l'écran.
-
-## ▶️ Utilisation
-
-1. Ouvrez l'application sur le décodeur : le pont ADB démarre tout seul.
-2. Si le pont est arrêté, le bouton **Relancer le pont** le redémarre.
-3. Pour changer une touche, cliquez sur **Changer** et choisissez l'application dans la liste.
-4. Au démarrage du décodeur, le pont se relance seul.
+---
 
 ## ⚠️ Fonctionnement et limites
 
