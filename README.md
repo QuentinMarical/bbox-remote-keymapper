@@ -59,14 +59,10 @@ L'APK est généré dans `app/build/outputs/apk/debug/app-debug.apk`.
 
 ## 📦 Installation sur le décodeur
 
-Activez le débogage ADB sur le décodeur (réseau ou USB), puis :
+1. Copiez `app-debug.apk` sur le décodeur, par exemple depuis une clé USB, et installez-le avec un gestionnaire de fichiers.
+2. Ouvrez l'application une fois : elle démarre le pont ADB, qui affiche une demande d'autorisation sur l'écran. Cochez « toujours autoriser ».
 
-```bash
-adb connect 192.168.1.100:5555
-adb install -r app-debug.apk
-```
-
-Remplacez `192.168.1.100` par l'adresse IP de votre décodeur. Acceptez la demande d'autorisation qui s'affiche sur l'écran, avec « toujours autoriser ».
+Le débogage ADB doit être actif sur le décodeur, car l'application s'y connecte elle-même (`127.0.0.1:5555`). Aucune commande depuis un PC n'est nécessaire.
 
 ## ▶️ Utilisation
 
