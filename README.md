@@ -15,8 +15,6 @@
 
 L'application se connecte elle-même au démon ADB du décodeur (`127.0.0.1:5555`) et lit la télécommande : aucun PC n'est nécessaire une fois l'application installée.
 
-> GitHub n'applique pas le CSS dans les README : la mise en forme passe par du HTML simple et des badges colorés.
-
 ---
 
 ## 🎛️ Touches reliées
