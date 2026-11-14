@@ -19,18 +19,19 @@ L'application se connecte elle-même au démon ADB du décodeur (`127.0.0.1:5555
   <img src="assets/capture-app.png" width="640" alt="Écran de l'application sur le décodeur" />
 </p>
 
-**Compatibilité** : testé uniquement sur une SFR Connect TV (Android TV 12) avec la télécommande Bbox Miami. Les autres boîtiers Android TV n'ont pas été testés.
+> **Compatibilité** : testé uniquement sur un décodeur **SFR Connect TV** (Android TV 12) avec une télécommande **Bbox Miami**. Les autres boîtiers Android TV n'ont pas été testés.
 
 ---
 
-## 📑 Sommaire
+## Sommaire
 
-- [Touches reliées](#-touches-reliées)
-- [Installation sur le décodeur](#-installation-sur-le-décodeur)
-- [Activer le mode développeur et ADB](#-activer-le-mode-développeur-et-adb)
-- [Utilisation](#-utilisation)
-- [Compilation](#-compilation)
-- [Fonctionnement et limites](#-fonctionnement-et-limites)
+- [Touches reliées](#touches-reliées)
+- [Activer le mode développeur et ADB](#activer-le-mode-développeur-et-adb)
+- [Installation sur le décodeur](#installation-sur-le-décodeur)
+- [Utilisation](#utilisation)
+- [Fonctionnement et limites](#fonctionnement-et-limites)
+- [Dépannage](#dépannage)
+- [Compilation et développement](#compilation-et-développement)
 
 ---
 
@@ -51,41 +52,12 @@ Les touches **TV**, **Menu** et **Favoris** peuvent être changées depuis l'éc
 
 Les autres touches sont gérées nativement par Android TV.
 
-### Télécommande d'origine (pour référence)
+<details>
+<summary>Référence : télécommande d'origine</summary>
 
 Le bouton REPLAY de la télécommande d'origine envoie le scancode `0x195` (405) sur le périphérique `RemoteB038`. Le système le traduit en `KEYCODE_SDMCEXTEND6`, qui lance REPLAY via le service `GlobalKey`.
 
----
-
-## 📦 Installation sur le décodeur
-
-Il faut d'abord que le débogage ADB soit actif sur le décodeur : l'application s'y connecte elle-même (`127.0.0.1:5555`). Voir [Activer le mode développeur et ADB](#-activer-le-mode-développeur-et-adb).
-
-Ensuite, deux méthodes pour installer `app-debug.apk` :
-
-**Méthode 1 : depuis le décodeur**
-
-1. Copiez `app-debug.apk` sur le décodeur, par exemple depuis une clé USB, et installez-le avec un gestionnaire de fichiers.
-2. Ouvrez l'application une fois.
-
-**Méthode 2 : depuis un PC avec ADB**
-
-Vous avez besoin d'ADB sur l'ordinateur. Deux possibilités :
-
-- **Android Studio** : téléchargez-le sur [developer.android.com/studio](https://developer.android.com/studio). ADB est fourni avec le SDK (dossier `platform-tools`).
-- **Minimal ADB and Fastboot** (Windows uniquement) : téléchargez-le depuis le [fil XDA-Developers](https://forum.xda-developers.com/showthread.php?t=2317790). Vérifiez le fichier avant de l'exécuter, car il existe des copies non officielles.
-- Pour toute plate-forme, le plus sûr reste les [platform-tools officiels de Google](https://developer.android.com/tools/releases/platform-tools).
-
-Puis :
-
-```bash
-adb connect 192.168.1.100:5555
-adb install -r app-debug.apk
-```
-
-Remplacez `192.168.1.100` par l'adresse IP de votre décodeur.
-
-**Première ouverture** : l'application démarre le pont ADB, qui affiche une demande d'autorisation sur l'écran du décodeur. Cochez « toujours autoriser ». Cette demande apparaît généralement au premier lancement : si vous ne regardez pas la télé à ce moment-là, l'application peut sembler ne pas réagir. Ouvrez-la de nouveau et regardez l'écran.
+</details>
 
 ---
 
@@ -97,9 +69,36 @@ Ces étapes supposent que les options pour développeurs sont déjà accessibles
 2. Sélectionnez **Informations sur le système**, puis **Numéro de build** (ou **Version**), et appuyez plusieurs fois dessus jusqu'à l'apparition d'un message indiquant que les options pour développeurs sont activées.
 3. Revenez aux paramètres, ouvrez **Options pour les développeurs**.
 4. Activez **Débogage USB** et, si le menu le propose, **Débogage réseau** (ou **Débogage ADB sur le réseau**).
-5. Notez l'adresse IP du décodeur, affichée dans **Réseau** ou **Informations réseau**.
 
 Documentation officielle Android : [Options pour les développeurs](https://developer.android.com/studio/debug/dev-options).
+
+---
+
+## 📦 Installation sur le décodeur
+
+Le débogage ADB doit être actif sur le décodeur, car l'application s'y connecte elle-même (`127.0.0.1:5555`). Voir [Activer le mode développeur et ADB](#activer-le-mode-développeur-et-adb).
+
+Récupérez l'APK `app-debug.apk` : il est disponible dans l'onglet [**Releases**](https://github.com/QuentinMarical/bbox-remote-keymapper/releases) du dépôt, ou se compile comme indiqué plus bas.
+
+Ensuite, deux méthodes pour l'installer :
+
+**Méthode 1 : depuis le décodeur**
+
+1. Copiez `app-debug.apk` sur le décodeur, par exemple depuis une clé USB, et installez-le avec un gestionnaire de fichiers.
+2. Ouvrez l'application une fois.
+
+**Méthode 2 : depuis un PC avec ADB**
+
+Il faut ADB sur l'ordinateur. Le plus sûr est d'installer les [platform-tools officiels de Google](https://developer.android.com/tools/releases/platform-tools). Sous Windows, `winget install Google.PlatformTools` ; sous macOS, `brew install android-platform-tools`.
+
+Ensuite, remplacez `192.168.1.100` par l'adresse IP de votre décodeur (affichée dans **Réseau** ou **Informations réseau**), puis :
+
+```bash
+adb connect 192.168.1.100:5555
+adb install -r app-debug.apk
+```
+
+**Première ouverture : la popup d'autorisation.** Au premier lancement, l'application démarre le pont ADB, et le décodeur affiche une demande d'autorisation du débogage depuis `127.0.0.1`. Regardez l'écran du téléviseur à ce moment-là et cochez **Toujours autoriser**. Sans cela, l'application semble inactive.
 
 ---
 
@@ -112,7 +111,24 @@ Documentation officielle Android : [Options pour les développeurs](https://deve
 
 ---
 
-## 🛠️ Compilation
+## ⚠️ Fonctionnement et limites
+
+- Le pont s'exécute au premier plan avec une notification, pour qu'Android ne l'arrête pas quand l'application est inactive.
+- Pendant la veille, le réseau du décodeur est coupé : le pont se reconnecte au réveil, en réessayant toutes les 3 à 10 secondes.
+- Le numéro `/dev/input/eventN` de la télécommande change parfois au redémarrage : le pont retrouve la télécommande par son nom d'entrée `Telecommande`.
+- Les choix faits dans le sélecteur sont enregistrés sur le décodeur et restent après un redémarrage.
+
+---
+
+## 🩺 Dépannage
+
+- **Le pont reste arrêté** : vérifiez que le débogage réseau (ADB) est toujours activé dans les options pour développeurs. Il peut se désactiver après un redémarrage ou une mise à jour du décodeur.
+- **Les touches reliées ne réagissent pas** : vérifiez que la télécommande est bien appairée dans les paramètres Bluetooth d'Android TV. Le pont la retrouve par son nom d'entrée `Telecommande`.
+- **L'application semble inactive au premier lancement** : regardez l'écran du téléviseur et cochez **Toujours autoriser** dans la demande d'autorisation ADB.
+
+---
+
+## 🛠️ Compilation et développement
 
 Le projet ne contient pas le wrapper Gradle. Il faut :
 - JDK 17 ou plus ;
@@ -127,12 +143,8 @@ gradle assembleDebug
 
 L'APK est généré dans `app/build/outputs/apk/debug/app-debug.apk`.
 
----
+### Ajouter une touche
 
-## ⚠️ Fonctionnement et limites
-
-- Le pont s'exécute au premier plan avec une notification, pour qu'Android ne l'arrête pas quand l'application est inactive.
-- Pendant la veille, le réseau du décodeur est coupé : le pont se reconnecte au réveil, en réessayant toutes les 3 à 10 secondes.
-- Le numéro `/dev/input/eventN` de la télécommande change parfois au redémarrage : le pont retrouve la télécommande par son nom (`Telecommande`).
-- Les choix faits dans le sélecteur sont enregistrés sur le décodeur et restent après un redémarrage.
-- Pour ajouter une touche, complétez la table `BUTTONS` dans `app/src/main/java/fr/bbox/keymapper/AdbWatchService.java`.
+1. Relevez le code hexadécimal de la touche avec `getevent` : ouvrez un terminal ADB connecté au décodeur, lancez `adb shell getevent -l`, puis appuyez sur la touche. La ligne `EV_KEY` donne le nom du code noyau, et le code hexadécimal se lit avec `adb shell getevent` (sans `-l`).
+2. Ajoutez une ligne dans la table `BUTTONS` de `app/src/main/java/fr/bbox/keymapper/AdbWatchService.java` : code scan hexadécimal sur quatre chiffres, libellé, et commande shell. Pour une touche qui lance une application au choix, utilisez la constante `APP`.
+3. Recompilez et réinstallez l'application.
