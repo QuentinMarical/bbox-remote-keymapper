@@ -20,6 +20,8 @@ L'application se connecte elle-même au démon ADB du décodeur (`127.0.0.1:5555
 </p>
 
 > **Compatibilité** : testé uniquement sur un décodeur **SFR Connect TV** (Android TV 12) avec une télécommande **Bbox Miami**. Les autres boîtiers Android TV n'ont pas été testés.
+>
+> **Prérequis important** : depuis une mise à jour déployée par SFR en **décembre 2025**, l'accès aux options pour développeurs (et donc au débogage ADB) est verrouillé par un mot de passe opérateur.
 
 ---
 
@@ -63,7 +65,9 @@ Le bouton REPLAY de la télécommande d'origine envoie le scancode `0x195` (405)
 
 ## 🔧 Activer le mode développeur et ADB
 
-Ces étapes supposent que les options pour développeurs sont déjà accessibles sur le décodeur. Les libellés des menus peuvent varier selon la version du système.
+> **Note (mise à jour SFR de décembre 2025)** : suite à une mise à jour système déployée par SFR en décembre 2025, l'activation du mode développeur est désormais protégée par un mot de passe défini par l'opérateur. L'accès ADB étant indispensable au fonctionnement de l'application, ces étapes ne sont réalisables que si les options pour développeurs étaient déjà déverrouillées avant cette mise à jour ou si vous disposez du code d'accès.
+
+Les libellés des menus ci-dessous peuvent varier selon la version du système :
 
 1. Ouvrez les **Paramètres** du décodeur, puis **Préférences de l'appareil** (ou **À propos**).
 2. Sélectionnez **Informations sur le système**, puis **Numéro de build** (ou **Version**), et appuyez plusieurs fois dessus jusqu'à l'apparition d'un message indiquant que les options pour développeurs sont activées.
@@ -76,7 +80,7 @@ Documentation officielle Android : [Options pour les développeurs](https://deve
 
 ## 📦 Installation sur le décodeur
 
-Le débogage ADB doit être actif sur le décodeur, car l'application s'y connecte elle-même (`127.0.0.1:5555`). Voir [Activer le mode développeur et ADB](#activer-le-mode-développeur-et-adb).
+Le débogage ADB doit être actif sur le décodeur, car l'application s'y connecte elle-même (`127.0.0.1:5555`). Voir [Activer le mode développeur et ADB](#-activer-le-mode-développeur-et-adb).
 
 Récupérez l'APK `app-debug.apk` : il est disponible dans l'onglet [**Releases**](https://github.com/QuentinMarical/bbox-remote-keymapper/releases) du dépôt, ou se compile comme indiqué plus bas.
 
@@ -145,12 +149,10 @@ L'APK est généré dans `app/build/outputs/apk/debug/app-debug.apk`.
 
 ### Ajouter une touche
 
-1. Relevez le code hexadécimal de la touche avec `getevent` : ouvrez un terminal ADB connecté au décodeur, lancez `adb shell getevent -l`, puis appuyez sur la touche pour repérer la ligne `EV_KEY` (le nom du code noyau). Relancez ensuite `adb shell getevent` (sans `-l`) pour lire le code brut :
-
+1. Relevez le code hexadécimal de la touche avec `getevent` : ouvrez un terminal ADB connecté au décodeur, lancez `adb shell getevent -l`, puis appuyez sur la touche pour repérer la ligne `EV_KEY`. Relancez ensuite `adb shell getevent` (sans `-l`) pour lire le code brut :
    ```text
-   /dev/input/event6: 0001 00ba 00000001
+   /dev/input/event2: 0001 00ba 00000001
    ```
-
-   Ici, `0001` correspond à `EV_KEY` et le deuxième groupe (`00ba`) est le code hexadécimal à reporter. Le chemin `event6` peut changer au redémarrage.
+   Ici, `0001` correspond à `EV_KEY` et le deuxième groupe (`00ba`) est le code hexadécimal à reporter.
 2. Ajoutez une ligne dans la table `BUTTONS` de `app/src/main/java/fr/bbox/keymapper/AdbWatchService.java` : code scan hexadécimal sur quatre chiffres, libellé, et commande shell. Pour une touche qui lance une application au choix, utilisez la constante `APP`.
 3. Recompilez et réinstallez l'application.
