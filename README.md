@@ -21,7 +21,7 @@ L'application se connecte elle-même au démon ADB du décodeur (`127.0.0.1:5555
 
 > **Compatibilité** : testé uniquement sur un décodeur **SFR Connect TV** (Android TV 12) avec une télécommande **Bbox Miami**. Les autres boîtiers Android TV n'ont pas été testés.
 >
-> **Prérequis important** : depuis une mise à jour déployée par SFR en **décembre 2025**, l'accès aux options pour développeurs (et donc au débogage ADB) est verrouillé par un mot de passe opérateur. Une méthode permettant de le retrouver est documentée sur [ce dépôt](LIEN_DU_DEPOT).
+> **Prérequis important** : depuis une mise à jour déployée par SFR en **décembre 2025**, l'accès aux options pour développeurs (et donc au débogage ADB) est verrouillé par un mot de passe opérateur. Une méthode permettant de le retrouver est documentée sur [ce dépôt](https://github.com/dotkl3m/dev_mode_unlock).
 
 ---
 
