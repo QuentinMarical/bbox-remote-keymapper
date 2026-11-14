@@ -64,6 +64,23 @@ L'APK est généré dans `app/build/outputs/apk/debug/app-debug.apk`.
 
 Le débogage ADB doit être actif sur le décodeur, car l'application s'y connecte elle-même (`127.0.0.1:5555`). Aucune commande depuis un PC n'est nécessaire.
 
+### Option : installer depuis un PC avec ADB
+
+Si vous préférez installer l'APK depuis un ordinateur, vous avez besoin d'ADB. Deux possibilités :
+
+- **Android Studio** : téléchargez-le sur [developer.android.com/studio](https://developer.android.com/studio). ADB est fourni avec le SDK (dossier `platform-tools`).
+- **Minimal ADB and Fastboot** (Windows uniquement) : téléchargez-le depuis le [fil XDA-Developers](https://forum.xda-developers.com/showthread.php?t=2317790). Vérifiez le fichier avant de l'exécuter, car il existe des copies non officielles.
+- Pour toute plate-forme, le plus sûr reste les [platform-tools officiels de Google](https://developer.android.com/tools/releases/platform-tools).
+
+Ensuite, sur le décodeur avec le débogage ADB actif :
+
+```bash
+adb connect 192.168.1.100:5555
+adb install -r app-debug.apk
+```
+
+Remplacez `192.168.1.100` par l'adresse IP de votre décodeur, et acceptez la demande d'autorisation sur l'écran.
+
 ## ▶️ Utilisation
 
 1. Ouvrez l'application sur le décodeur : le pont ADB démarre tout seul.
