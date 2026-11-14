@@ -29,7 +29,7 @@ Le projet utilise Gradle (Android Gradle Plugin 8.5.2, `compileSdk` 34, Java 17)
 ## Installation sur le décodeur
 
 ```bash
-adb connect 192.168.68.117:5555
+adb connect 192.168.1.100:5555
 adb install -r app-debug.apk
 ```
 
